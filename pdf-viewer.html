@@ -1,0 +1,586 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#8fd8e8"
+  >
+
+  <title>Bamburi Beach Hotel - Daily Events</title>
+
+  <!-- Browser Icon -->
+  <link
+    rel="icon"
+    type="image/png"
+    href="bamburi_logo_resized_400h.png"
+  >
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
+    }
+
+    body {
+
+      font-family: Arial, Helvetica, sans-serif;
+
+      background:
+        linear-gradient(
+          rgba(255,255,255,0.90),
+          rgba(255,255,255,0.90)
+        ),
+        linear-gradient(
+          135deg,
+          #dff7fb,
+          #eefcff
+        );
+
+      color: #174b50;
+
+      padding-bottom: 15px;
+    }
+
+
+    /* TOP BAR */
+
+    .top-bar {
+
+      position: sticky;
+
+      top: 0;
+
+      z-index: 1000;
+
+      width: 100%;
+
+      background:
+        linear-gradient(
+          135deg,
+          #006b9e,
+          #32c5e8,
+          #0077b6
+        );
+
+      color: white;
+
+      padding: 9px 12px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      box-shadow:
+        0 3px 10px rgba(0,80,100,0.20);
+    }
+
+
+    /* HOTEL BRAND */
+
+    .brand {
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      gap: 7px;
+
+      text-align: center;
+    }
+
+
+    .brand img {
+
+      width: 34px;
+
+      height: 34px;
+
+      object-fit: contain;
+    }
+
+
+    /* HOTEL NAME */
+
+    .brand-text {
+
+      font-family: Algerian, "Algerian", Georgia, serif;
+
+      font-size: 13px;
+
+      font-weight: normal;
+
+      letter-spacing: 0.8px;
+
+      white-space: nowrap;
+    }
+
+
+    /* PROGRAMME CONTAINER */
+
+    .programme {
+
+      width: 100%;
+
+      max-width: 900px;
+
+      margin: 12px auto 0;
+
+      padding: 0 8px;
+    }
+
+
+    /* PROGRAMME IMAGES */
+
+    .programme img {
+
+      display: block;
+
+      width: 100%;
+
+      height: auto;
+
+      margin:
+        0 auto 14px;
+
+      border-radius: 5px;
+
+      box-shadow:
+        0 4px 14px
+        rgba(0,80,100,0.16);
+
+      background: white;
+
+      user-select: none;
+
+      -webkit-user-drag: none;
+    }
+
+
+    /* LOADING */
+
+    .loading {
+
+      text-align: center;
+
+      padding: 30px;
+
+      color: #52777d;
+
+      font-size: 14px;
+    }
+
+
+    /* ERROR */
+
+    .error {
+
+      display: none;
+
+      max-width: 500px;
+
+      margin: 30px auto;
+
+      padding: 20px;
+
+      text-align: center;
+
+      background: white;
+
+      border-radius: 12px;
+
+      color: #b00020;
+
+      box-shadow:
+        0 4px 15px
+        rgba(0,0,0,0.12);
+    }
+
+
+    /* COPYRIGHT */
+
+    .copyright {
+
+      text-align: center;
+
+      margin-top: 12px;
+
+      font-size: 9px;
+
+      color: #777;
+
+      letter-spacing: 0.3px;
+    }
+
+
+    /* MOBILE */
+
+    @media (max-width: 600px) {
+
+      .top-bar {
+
+        padding: 8px;
+      }
+
+
+      .brand img {
+
+        width: 30px;
+
+        height: 30px;
+      }
+
+
+      .brand-text {
+
+        font-size: 10px;
+
+        letter-spacing: 0.5px;
+      }
+
+
+      .programme {
+
+        padding: 0 4px;
+
+        margin-top: 8px;
+      }
+
+
+      .programme img {
+
+        margin-bottom: 9px;
+
+        border-radius: 3px;
+      }
+
+
+      .copyright {
+
+        font-size: 8px;
+
+        margin-top: 10px;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <!-- TOP BAR -->
+
+  <header class="top-bar">
+
+    <div class="brand">
+
+      <img
+        src="bamburi_logo_resized_400h.png"
+        alt="Bamburi Beach Hotel"
+      >
+
+      <div class="brand-text">
+        BAMBURI BEACH HOTEL
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <!-- PROGRAMME -->
+
+  <main
+    id="programme"
+    class="programme"
+  >
+
+    <div
+      id="loading"
+      class="loading"
+    >
+      Loading programme...
+    </div>
+
+  </main>
+
+
+  <!-- ERROR -->
+
+  <div
+    id="error"
+    class="error"
+  >
+
+    Programme images could not be loaded.
+
+    <br><br>
+
+    Please check that the programme files are
+    uploaded correctly.
+
+  </div>
+
+
+  <!-- COPYRIGHT ONLY -->
+
+  <div class="copyright">
+
+    Copyright © Bamburi Beach Hotel.
+    All Rights Reserved.
+
+  </div>
+
+
+  <script>
+
+
+    /*
+     * READ URL PARAMETERS
+     *
+     * Example:
+     *
+     * pdf-viewer.html?type=adults&title=Adults%20Daily%20Events
+     */
+
+    const params =
+      new URLSearchParams(
+        window.location.search
+      );
+
+
+    const type =
+      params.get("type");
+
+
+    const title =
+      params.get("title");
+
+
+    /*
+     * PROGRAMME SETTINGS
+     */
+
+    const programmes = {
+
+      adults: {
+
+        folder: "programs/adults",
+
+        pages: 7
+
+      },
+
+
+      kids: {
+
+        folder: "programs/kids",
+
+        pages: 7
+
+      },
+
+
+      evening: {
+
+        folder: "programs/evening",
+
+        pages: 1
+
+      }
+
+    };
+
+
+    /*
+     * FIND SELECTED PROGRAMME
+     */
+
+    const selected =
+      programmes[type];
+
+
+    const programme =
+      document.getElementById(
+        "programme"
+      );
+
+
+    const loading =
+      document.getElementById(
+        "loading"
+      );
+
+
+    const error =
+      document.getElementById(
+        "error"
+      );
+
+
+    /*
+     * CHECK PROGRAMME
+     */
+
+    if (!selected) {
+
+      loading.style.display =
+        "none";
+
+      error.style.display =
+        "block";
+
+    }
+
+    else {
+
+
+      /*
+       * REMOVE LOADING MESSAGE
+       */
+
+      loading.remove();
+
+
+      /*
+       * LOAD EACH IMAGE
+       */
+
+      for (
+        let page = 1;
+        page <= selected.pages;
+        page++
+      ) {
+
+
+        const image =
+          document.createElement(
+            "img"
+          );
+
+
+        /*
+         * IMAGE PATH
+         *
+         * Example:
+         *
+         * programs/adults/page-1.png
+         * programs/adults/page-2.png
+         */
+
+        image.src =
+          selected.folder +
+          "/page-" +
+          page +
+          ".png";
+
+
+        image.alt =
+          (title || "Daily Events") +
+          " - Page " +
+          page;
+
+
+        /*
+         * IF IMAGE CANNOT LOAD
+         */
+
+        image.onerror =
+          function() {
+
+            console.error(
+              "Could not load:",
+              this.src
+            );
+
+            this.remove();
+
+          };
+
+
+        /*
+         * ADD IMAGE TO PAGE
+         */
+
+        programme.appendChild(
+          image
+        );
+
+      }
+
+    }
+
+
+    /*
+     * PREVENT RIGHT CLICK ON IMAGES
+     */
+
+    document.addEventListener(
+      "contextmenu",
+      function(event) {
+
+        if (
+          event.target.tagName ===
+          "IMG"
+        ) {
+
+          event.preventDefault();
+
+        }
+
+      }
+    );
+
+
+    /*
+     * PREVENT DRAGGING IMAGES
+     */
+
+    document.addEventListener(
+      "dragstart",
+      function(event) {
+
+        if (
+          event.target.tagName ===
+          "IMG"
+        ) {
+
+          event.preventDefault();
+
+        }
+
+      }
+    );
+
+
+  </script>
+
+
+</body>
+
+</html>
